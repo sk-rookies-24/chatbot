@@ -2,6 +2,8 @@ package com.example.chatbot.controller;
 
 
 import com.example.chatbot.dto.ChatbotSelectDto;
+import com.example.chatbot.dto.ChatbotTypingReqDto;
+import com.example.chatbot.dto.ChatbotTypingResDto;
 import com.example.chatbot.service.ChatbotService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +21,12 @@ public class ChatbotController {
     public ChatbotSelectDto getAnswer (@PathVariable int no) {
         return chatbotservice.getAnswer(no);
     }
-//
-//    @PostMapping("/typing")
+
+    @PostMapping("/typing")
+    public ChatbotTypingResDto chat (@RequestBody ChatbotTypingReqDto reqDto) {
+        return chatbotservice.chat(reqDto);
+    }
+
 
 
 }
