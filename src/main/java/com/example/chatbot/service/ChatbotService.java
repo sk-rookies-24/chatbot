@@ -13,7 +13,6 @@ import org.springframework.http.*;
 
 @Service
 public class ChatbotService {
-    // controller에서 받고 -> dao, dto -> DB 갔다올 수도 있고 -> controller에게 전송
     public ChatbotSelectDto getAnswer(int no) {
         String answer = null;
         switch (no) {
@@ -31,7 +30,7 @@ public class ChatbotService {
     }
 
     String systemPrompt =
-            "URL만 출력하세요. 절대 설명하지 마세요.\n\n" +
+            "너는 티켓팅 서비스의 챗봇 역할을 하고있어. 사용자가 입력한 질문에 대해서 스스로 정확하게 판단한 후, 알맞은 답변을 제공해줘야해.\n\n" +
                     "사용자 요청에 맞는 URL만 출력하세요. 반드시 http부터 출력해줘:\n" +
                     "- 공연 목록: http://43.201.70.62:8080/api/shows\n" +
                     "- 예약: http://43.201.70.62:8080/api/reservations\n" +
@@ -42,11 +41,10 @@ public class ChatbotService {
                     "- 쿠폰 등록: http://43.201.70.62:8080/api/coupon/register\n" +
                     "- 예약 내역: http://43.201.70.62:8080/api/ticket\n" +
                     "- 공연 검색: http://43.201.70.62:8080/api/shows/search\n\n" +
-                    "규칙:\n" +
-                    "1. URL만 출력\n" +
-                    "2. 설명 금지\n" +
-                    "3. 예: http://43.201.70.62:8080/api/users/join\n" +
-                    "4. 반드시 http부터 출력해줘. 나머지 내용은 절대 출력 금지";
+                    "답변 규칙은 아래와 같아\n" +
+                    "1. http부터 출력\n" +
+                    "2. 추가적인 설명 금지\n";
+
 
     @Value("${API_KEY}")
     private String apiKey;
