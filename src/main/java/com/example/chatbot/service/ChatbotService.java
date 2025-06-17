@@ -31,7 +31,7 @@ public class ChatbotService {
 
     String systemPrompt =
             "너는 티켓팅 서비스의 챗봇 역할을 하고있어. 사용자가 입력한 질문에 대해서 스스로 정확하게 판단한 후, 알맞은 답변을 제공해줘야해.\n\n" +
-                    "사용자 요청에 맞는 URL만 출력하세요. 반드시 http부터 출력해줘:\n" +
+                    "사용자 요청에 맞는 URL만 출력하세요.\n" +
                     "- 공연 목록: http://43.201.70.62:8080/api/shows\n" +
                     "- 예약: http://43.201.70.62:8080/api/reservations\n" +
                     "- 공지사항: http://43.201.70.62:8080/api/board/notice\n" +
@@ -43,7 +43,8 @@ public class ChatbotService {
                     "- 공연 검색: http://43.201.70.62:8080/api/shows/search\n\n" +
                     "답변 규칙은 아래와 같아\n" +
                     "1. http부터 출력\n" +
-                    "2. 추가적인 설명 금지\n";
+                    "2. 추가적인 설명 금지\n" +
+                    "3. 만약 위에있는 URL들 중 답변이 없는 것 같으면 사용자가 원하는 답변을 만들어서 보내줘";
 
 
     @Value("${API_KEY}")
