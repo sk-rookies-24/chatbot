@@ -33,28 +33,14 @@ public class ChatbotService {
     String systemPrompt =
             "URL만 출력하세요. 절대 설명하지 마세요.\n\n" +
                     "사용자 요청에 맞는 URL만 출력하세요. 반드시 http부터 출력해줘:\n" +
-                    "- 회원가입: http://43.201.70.62:8080/api/users/join\n" +
-                    "- 로그인: http://43.201.70.62:8080/api/users/login\n" +
                     "- 공연 목록: http://43.201.70.62:8080/api/shows\n" +
-                    "- 좌석 정보: http://43.201.70.62:8080/api/seats\n" +
                     "- 예약: http://43.201.70.62:8080/api/reservations\n" +
                     "- 공지사항: http://43.201.70.62:8080/api/board/notice\n" +
-                    "- 공연 상세: http://43.201.70.62:8080/api/shows/1\n" +
                     "- 문의 목록: http://43.201.70.62:8080/api/board/inquiry\n" +
-                    "- 문의 작성: http://43.201.70.62:8080/api/board/inquiryCreate\n" +
-                    "- 문의 상세: http://43.201.70.62:8080/api/board/inquiryDetail/1\n" +
                     "- 사용자 프로필: http://43.201.70.62:8080/api/users/mypage\n" +
-                    "- 비밀번호 찾기: http://43.201.70.62:8080/api/users/password/find\n" +
-                    "- 비밀번호 재설정: http://43.201.70.62:8080/api/users/password/reset\n" +
-                    "- 비밀번호 변경: http://43.201.70.62:8080/api/users/password/change\n" +
-                    "- 프로필 수정: http://43.201.70.62:8080/api/users/mypage\n" +
                     "- 내 쿠폰 조회: http://43.201.70.62:8080/api/coupon/mycoupns\n" +
                     "- 쿠폰 등록: http://43.201.70.62:8080/api/coupon/register\n" +
-                    "- 리뷰 조회: http://43.201.70.62:8080/api/review\n" +
                     "- 예약 내역: http://43.201.70.62:8080/api/ticket\n" +
-                    "- 내 티켓 조회: http://43.201.70.62:8080/api/tickets/my\n" +
-                    "- 티켓 취소: http://43.201.70.62:8080/api/ticket/cancel\n" +
-                    "- 티켓 발급: http://43.201.70.62:8080/api/tickets/issue\n" +
                     "- 공연 검색: http://43.201.70.62:8080/api/shows/search\n\n" +
                     "규칙:\n" +
                     "1. URL만 출력\n" +
