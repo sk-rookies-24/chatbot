@@ -4,23 +4,21 @@ import com.example.chatbot.dto.ChatbotSelectDto;
 import com.example.chatbot.dto.ChatbotTypingReqDto;
 import com.example.chatbot.service.ChatbotService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.context.WebContext;
-import org.thymeleaf.web.IWebExchange;
-import org.thymeleaf.web.servlet.JakartaServletWebApplication;
-import org.thymeleaf.spring6.expression.ThymeleafEvaluationContext;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.expression.ThymeleafEvaluationContext;
 
-
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @RestController
@@ -30,9 +28,9 @@ public class ChatbotController {
 
     private final ChatbotService chatbotservice;
     private final SpringTemplateEngine templateEngine;
-    private final ApplicationContext applicationContext; // 추가
+    private final ApplicationContext applicationContext;
 
-    @Autowired // 생성자 주입
+    @Autowired
     public ChatbotController(SpringTemplateEngine templateEngine, ChatbotService chatbotService, ApplicationContext applicationContext) {
         this.templateEngine = templateEngine;
         this.chatbotservice = chatbotService;
@@ -53,14 +51,13 @@ public class ChatbotController {
         // 1. Perplexity API에서 응답 받아오기
         String result = chatbotservice.chat(reqDto).getResult();
 
-        // 2. Thymeleaf WebContext에 값 주입 (Thymeleaf 3.1 방식)
+        // 2. Thymeleaf WebContext에 값 주입 (Spring Boot 2.x + Thymeleaf 3.0.x)
         ServletContext servletContext = request.getServletContext();
-        JakartaServletWebApplication webApp = JakartaServletWebApplication.buildApplication(servletContext);
-        IWebExchange webExchange = webApp.buildExchange(request, response);
-        WebContext context = new WebContext(webExchange, request.getLocale());
+        Locale locale = request.getLocale();
+        WebContext context = new WebContext(request, response, servletContext, locale);
         context.setVariable("result", result);
 
-        // ApplicationContext를 사용해 ThymeleafEvaluationContext 주입
+        // ThymeleafEvaluationContext 주입
         context.setVariable(
                 ThymeleafEvaluationContext.THYMELEAF_EVALUATION_CONTEXT_CONTEXT_VARIABLE_NAME,
                 new ThymeleafEvaluationContext(applicationContext, null)
