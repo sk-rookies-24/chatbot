@@ -39,6 +39,8 @@ dependencies {
 	implementation 'org.jsoup:jsoup:1.20.1'
 
 	implementation 'org.glassfish:javax.el:3.0.1-b12'
+	implementation 'org.apache.tomcat.embed:tomcat-embed-el:9.0.63'
+
 
 }
 
