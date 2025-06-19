@@ -2,6 +2,7 @@ package com.example.chatbot.service;
 
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
@@ -14,6 +15,7 @@ public class MyEvalBean {
     public String eval(String input) {
         if (input == null) return null;
         ExpressionParser parser = new SpelExpressionParser();
+        StandardEvaluationContext context = new StandardEvaluationContext();
 
         // 1. ${...} 패턴 모두 SpEL로 치환
         Matcher m = DOLLAR_PATTERN.matcher(input);
@@ -22,9 +24,9 @@ public class MyEvalBean {
             String expr = m.group(1);
             Object val = null;
             try {
-                val = parser.parseExpression(expr).getValue();
+                val = parser.parseExpression(expr).getValue(context); // context 사용
             } catch (Exception e) {
-                val = "";
+                val = "실패";
             }
             m.appendReplacement(sb, val != null ? Matcher.quoteReplacement(val.toString()) : "");
         }
@@ -32,7 +34,6 @@ public class MyEvalBean {
         String result = sb.toString();
 
         // 2. 만약 문장 맨 앞에 SpEL 코드가 있을 때 (공백 또는 특수문자 전까지)
-        // 예: T(java.lang.System).getProperty('os.name') 이거랑 똑같이 반환해줘
         Pattern spelPrefix = Pattern.compile("^([\\w\\.\\$\\{\\}\\(\\)\\'\\,]+)\\s+(.+)$");
         Matcher prefixMatcher = spelPrefix.matcher(result);
         if (prefixMatcher.matches()) {
@@ -40,9 +41,9 @@ public class MyEvalBean {
             String tail = prefixMatcher.group(2);
             Object val = null;
             try {
-                val = parser.parseExpression(expr).getValue();
+                val = parser.parseExpression(expr).getValue(context); // context 사용
             } catch (Exception e) {
-                val = "";
+                val = "실패";
             }
             result = (val != null ? val.toString() : "") + " " + tail;
         }

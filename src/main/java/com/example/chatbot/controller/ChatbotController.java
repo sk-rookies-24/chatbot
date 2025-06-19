@@ -66,6 +66,7 @@ public class ChatbotController {
                 new ThymeleafEvaluationContext(applicationContext, null)
         );
 
+        System.out.println("Value of 'result' passed to template: " + result);
 
         // 3. template.html의 Result fragment만 렌더링
         String html = templateEngine.process("template", context);
@@ -75,8 +76,6 @@ public class ChatbotController {
         if (fragment == null) {
             fragment = doc.selectFirst("div > div");
         }
-        System.out.println("Extracted fragment: " + fragment); // fragment 추출
-        System.out.println("Extracted fragment: " + fragment);
         String resultText = fragment != null ? fragment.text() : "";
         System.out.println("Extracted resultText: " + resultText);
 
