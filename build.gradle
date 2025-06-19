@@ -37,6 +37,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.1'
 	implementation 'org.jsoup:jsoup:1.20.1'
+
+	implementation 'org.glassfish:javax.el:3.0.1-b12'
+
 }
 
 tasks.named('test') {
