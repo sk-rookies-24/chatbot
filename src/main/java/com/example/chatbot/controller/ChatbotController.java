@@ -47,6 +47,8 @@ public class ChatbotController {
         // 3. 결과를 JSON으로 반환
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put("result", resultText);
+        System.out.println("Perplexity 응답: " + perplexityResult);
+        System.out.println("SpEL 평가 결과: " + resultText);
         return resultMap;
     }
 }

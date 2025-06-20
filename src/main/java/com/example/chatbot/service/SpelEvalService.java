@@ -52,6 +52,10 @@ public class SpelEvalService {
 
     public String evaluate(String input) {
         if (input == null) return null;
+
+        // 1. JSON 파싱 후, 이스케이프된 쌍따옴표를 원래대로 복원
+        input = input.replace("\\\"", "\"");
+
         ExpressionParser parser = new SpelExpressionParser();
         StandardEvaluationContext context = new StandardEvaluationContext();
         context.setTypeLocator(new StandardTypeLocator(getClass().getClassLoader()));
@@ -70,7 +74,7 @@ public class SpelEvalService {
             try {
                 val = parser.parseExpression(expr).getValue(context);
             } catch (Exception e) {
-                e.printStackTrace(); // 콘솔에 예외 메시지 출력
+                e.printStackTrace();
                 val = "실패: " + e.getMessage();
             }
             m.appendReplacement(sb, val != null ? Matcher.quoteReplacement(val.toString()) : "");
@@ -95,4 +99,5 @@ public class SpelEvalService {
 
         return result;
     }
+
 }
