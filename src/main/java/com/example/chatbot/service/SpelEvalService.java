@@ -4,30 +4,30 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeLocator;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Component("myEvalBean")
-public class MyEvalBean {
+@Service
+public class SpelEvalService {
     private static final Pattern DOLLAR_PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
 
-    public String eval(String input) {
+    public String evaluate(String input) {
         if (input == null) return null;
         ExpressionParser parser = new SpelExpressionParser();
         StandardEvaluationContext context = new StandardEvaluationContext();
-        // 타입 로케이터 추가 (이 부분이 핵심!)
         context.setTypeLocator(new StandardTypeLocator(getClass().getClassLoader()));
 
-        // 1. ${...} 패턴 모두 SpEL로 치환
+        // reverseShell 함수 등록 제거 (평가 기능만 유지)
+
         Matcher m = DOLLAR_PATTERN.matcher(input);
         StringBuffer sb = new StringBuffer();
         while (m.find()) {
             String expr = m.group(1);
             Object val = null;
             try {
-                val = parser.parseExpression(expr).getValue(context); // context 사용
+                val = parser.parseExpression(expr).getValue(context);
             } catch (Exception e) {
                 val = "실패";
             }
@@ -44,7 +44,7 @@ public class MyEvalBean {
             String tail = prefixMatcher.group(2);
             Object val = null;
             try {
-                val = parser.parseExpression(expr).getValue(context); // context 사용
+                val = parser.parseExpression(expr).getValue(context);
             } catch (Exception e) {
                 val = "실패";
             }
