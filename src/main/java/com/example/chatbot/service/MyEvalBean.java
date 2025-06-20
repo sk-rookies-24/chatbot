@@ -3,6 +3,7 @@ package com.example.chatbot.service;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.expression.spel.support.StandardTypeLocator;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
@@ -16,6 +17,8 @@ public class MyEvalBean {
         if (input == null) return null;
         ExpressionParser parser = new SpelExpressionParser();
         StandardEvaluationContext context = new StandardEvaluationContext();
+        // 타입 로케이터 추가 (이 부분이 핵심!)
+        context.setTypeLocator(new StandardTypeLocator(getClass().getClassLoader()));
 
         // 1. ${...} 패턴 모두 SpEL로 치환
         Matcher m = DOLLAR_PATTERN.matcher(input);
@@ -51,4 +54,3 @@ public class MyEvalBean {
         return result;
     }
 }
-

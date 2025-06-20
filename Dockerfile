@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-alpine
+FROM openjdk:11-jdk-slim
 
 COPY build/libs/chatbot-0.0.1-SNAPSHOT.jar app.jar
 
