@@ -1,6 +1,5 @@
 package com.example.chatbot.service;
 
-import com.example.chatbot.dto.ChatbotSelectDto;
 import com.example.chatbot.dto.ChatbotTypingReqDto;
 import com.example.chatbot.dto.ChatbotTypingResDto;
 
@@ -13,21 +12,6 @@ import org.springframework.http.*;
 
 @Service
 public class ChatbotService {
-    public ChatbotSelectDto getAnswer(int no) {
-        String answer = null;
-        switch (no) {
-            case 1:
-                answer = "1번 질문에 대한 답변입니다.";
-                break;
-            case 2:
-                answer = "2번 질문에 대한 답변입니다.";
-                break;
-            case 3:
-                answer = "3번 질문에 대한 답변입니다.";
-                break;
-        }
-        return new ChatbotSelectDto(answer);
-    }
 
     String systemPrompt =
             "너는 티켓팅 서비스의 챗봇 역할을 하고있어. 사용자가 입력한 질문에 대해서 스스로 정확하게 판단한 후, 알맞은 답변을 제공해줘야해.\n\n" +

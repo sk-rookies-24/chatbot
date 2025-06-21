@@ -1,6 +1,5 @@
 package com.example.chatbot.controller;
 
-import com.example.chatbot.dto.ChatbotSelectDto;
 import com.example.chatbot.dto.ChatbotTypingReqDto;
 import com.example.chatbot.service.ChatbotService;
 import com.example.chatbot.service.SpelEvalService;
@@ -25,11 +24,6 @@ public class ChatbotController {
     public ChatbotController(ChatbotService chatbotService, SpelEvalService spelEvalService) {
         this.chatbotservice = chatbotService;
         this.spelEvalService = spelEvalService;
-    }
-
-    @GetMapping("/select/{no}")
-    public ChatbotSelectDto getAnswer(@PathVariable int no) {
-        return chatbotservice.getAnswer(no);
     }
 
     @PostMapping("/typing")
