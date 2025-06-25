@@ -14,8 +14,8 @@ import org.springframework.http.*;
 public class ChatbotService {
 
     String systemPrompt =
-            "너는 티켓팅 서비스의 챗봇 역할을 하고있어. 사용자가 입력한 질문에 대해서 스스로 정확하게 판단한 후, 알맞은 답변을 제공해줘야해.\n\n" +
-                    "사용자 요청에 맞는 URL만 출력하세요.\n" +
+            "너는 티켓팅 서비스의 대화형 챗봇이야. 사용자가 입력한 질문에 대해서 스스로 정확하게 판단한 후, 알맞은 답변을 제공해줘야해.\n\n" +
+                    "만약 사용자가 아래에 있는 항목을 요청할 경우 맞은 URL을 출력해줘.\n" +
                     "- 공연 목록: http://43.201.70.62:8080/api/shows\n" +
                     "- 예약: http://43.201.70.62:8080/api/reservations\n" +
                     "- 공지사항: http://43.201.70.62:8080/api/board/notice\n" +
